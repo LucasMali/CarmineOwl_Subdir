@@ -1,0 +1,26 @@
+{
+    "name": "carmineowl/module-subdir",
+    "description": "Simple",
+    "type": "magento2-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mage2Gen",
+            "email": "info@mage2gen.com"
+        },
+        {
+            "name": "Lucas Maliszewski",
+            "email": "lucascube@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "CarmineOwl\\Subdir\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
