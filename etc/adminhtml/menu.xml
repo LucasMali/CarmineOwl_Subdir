@@ -4,10 +4,10 @@
     <menu>
         <add id="CarmineOwl_Subdir::subdir" resource="CarmineOwl_Subdir::subdir"
              title="Sub Directories" module="CarmineOwl_Subdir"
-             sortOrder="10" parent="Magento_Backend::system"
+             sortOrder="50" parent="Magento_Backend::system" translate="title"
              dependsOnModule="Magento_Backend"/>
         <add id="CarmineOwl_Subdir::subdir_manage" resource="CarmineOwl_Subdir::subdir_manage"
-             title="Manage" action="subdir/index/index" module="CarmineOwl_Subdir"
+             title="Manage" action="subdir/create" module="CarmineOwl_Subdir"
              sortOrder="10" parent="CarmineOwl_Subdir::subdir"
              dependsOnModule="Magento_Backend"/>
     </menu>
