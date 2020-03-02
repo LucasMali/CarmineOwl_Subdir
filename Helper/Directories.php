@@ -1,9 +1,8 @@
 <?php
 
 
-namespace CarmineOwl\Subdir;
+namespace CarmineOwl\Subdir\Helper;
 
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * Class Directories
@@ -13,10 +12,11 @@ abstract class Directories
 {
     /**
      * @param string $directory
+     * @return bool
      */
-    public static function validate(string $directory)
+    public static function isValid(string $directory)
     {
-        is_dir($directory) ?: self::create($directory);
+        return is_dir($directory);
     }
 
     /**

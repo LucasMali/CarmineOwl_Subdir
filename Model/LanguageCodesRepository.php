@@ -73,6 +73,20 @@ class LanguageCodesRepository implements LanguageCodesRepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws NoSuchEntityException
+     */
+    public function getByCode($code)
+    {
+        $object = $this->objectFactory->create();
+        $this->objectResourceModel->load($object, $code, 'code');
+        if (!$object->getCode()) {
+            throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $code));
+        }
+        return $object;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function delete(LanguageCodesInterface $object)
     {

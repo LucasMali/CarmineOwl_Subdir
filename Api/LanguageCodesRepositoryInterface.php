@@ -30,6 +30,16 @@ interface LanguageCodesRepositoryInterface
     public function getById($id);
 
     /**
+     * Get a LanguageCodes by Code
+     *
+     * @param int $code
+     * @return LanguageCodesInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If LanguageCodes with the specified ID does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getByCode($code);
+
+    /**
      * Retrieve LanguageCodess which match a specified criteria.
      *
      * @param SearchCriteriaInterface $criteria

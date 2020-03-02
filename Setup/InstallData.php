@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * https://www.magestore.com/magento-2-tutorial/how-to-insertupdate-multiple-records-to-database-in-magento-2/
+ */
 namespace CarmineOwl\Subdir\Setup;
 
 use CarmineOwl\Subdir\Model\LanguageCodes;

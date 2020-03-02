@@ -15,7 +15,6 @@ class Validate extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct() // phpcs:ignore PSR2.Methods.MethodDeclaration
     {
-        $this->generateIndex = $generateIndex;
         $this->_init(\CarmineOwl\Subdir\Model\ResourceModel\Validate::class);
     }
 

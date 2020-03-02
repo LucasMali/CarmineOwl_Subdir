@@ -23,10 +23,11 @@
 
 namespace CarmineOwl\Subdir\Console\Command;
 
+use CarmineOwl\Subdir\Helper\ValidationManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -36,9 +37,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Validate extends Command
 {
-
     const NAME_ARGUMENT = "name";
     const NAME_OPTION = "option";
+    /**
+     * @var ValidationManager
+     */
+    private $validationManager;
+
+    public function __construct(ValidationManager $validationManager)
+    {
+        $this->validationManager = $validationManager;
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -49,8 +59,12 @@ class Validate extends Command
     ) {
         $name = $input->getArgument(self::NAME_ARGUMENT);
         $option = $input->getOption(self::NAME_OPTION);
-        $output->writeln("TODO build out validate " . $name);
-
+        try {
+            $this->validationManager->run();
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+        }
+        $output->writeln('<info>Finished validation<info>');
     }
 
     /**
@@ -62,9 +76,13 @@ class Validate extends Command
         $this->setDescription("Validates the sub directories");
         $this->setDefinition([
             new InputArgument(self::NAME_ARGUMENT, InputArgument::OPTIONAL, "Name"),
-            new InputOption(self::NAME_OPTION, "-a", InputOption::VALUE_NONE, "Option functionality")
+            new InputOption(
+                self::NAME_OPTION,
+                "-a",
+                InputOption::VALUE_NONE,
+                "Option functionality"
+            )
         ]);
         parent::configure();
     }
 }
-
