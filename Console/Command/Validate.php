@@ -30,11 +30,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Subdir
+ * Class Validate
  *
  * @package CarmineOwl\Subdir\Console\Command
  */
-class Subdir extends Command
+class Validate extends Command
 {
 
     const NAME_ARGUMENT = "name";
@@ -49,7 +49,7 @@ class Subdir extends Command
     ) {
         $name = $input->getArgument(self::NAME_ARGUMENT);
         $option = $input->getOption(self::NAME_OPTION);
-        $output->writeln("Hello " . $name);
+        $output->writeln("TODO build out validate " . $name);
     }
 
     /**
@@ -57,8 +57,8 @@ class Subdir extends Command
      */
     protected function configure()
     {
-        $this->setName("co:subdir:create");
-        $this->setDescription("Create a sub directory");
+        $this->setName("co:subdir:validate");
+        $this->setDescription("Validates the sub directories");
         $this->setDefinition([
             new InputArgument(self::NAME_ARGUMENT, InputArgument::OPTIONAL, "Name"),
             new InputOption(self::NAME_OPTION, "-a", InputOption::VALUE_NONE, "Option functionality")
