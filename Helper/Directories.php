@@ -16,7 +16,7 @@ abstract class Directories
      */
     public static function validate(string $directory)
     {
-        is_dir($directory) ?? self::create($directory);
+        is_dir($directory) ?: self::create($directory);
     }
 
     /**

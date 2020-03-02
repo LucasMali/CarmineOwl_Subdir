@@ -2,7 +2,11 @@
 
 namespace CarmineOwl\Subdir\Setup;
 
+use CarmineOwl\Subdir\Model\LanguageCodes;
+use CarmineOwl\Subdir\Model\ResourceModel\LanguageCodesFactory;
 use CarmineOwl\Subdir\Model\ResourceModel\ValidateFactory;
+use CarmineOwl\Subdir\Model\Validate;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class InstallData
@@ -15,10 +19,23 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      * @var ValidateFactory
      */
     private $validate;
+    /**
+     * @var LanguageCodes
+     */
+    private $languageCodes;
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
 
-    public function __construct(ValidateFactory $validate)
-    {
+    public function __construct(
+        ValidateFactory $validate,
+        LanguageCodesFactory $languageCodes,
+        DirectoryList $directoryList
+    ) {
         $this->validate = $validate;
+        $this->languageCodes = $languageCodes;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -48,9 +65,14 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
             /*
              * Install for the first subdirectory
              */
-            if (!$template = file_get_contents(self::TEMPLATE_NAME)) {
-                throw new \LogicException(sprintf('Unable to load the template %s',
-                    self::TEMPLATE_NAME))
+            $_fileName = __DIR__ . DIRECTORY_SEPARATOR . self::TEMPLATE_NAME;
+            if (!$template = file_get_contents(
+                $_fileName
+            )) {
+                throw new \LogicException(sprintf(
+                    'Unable to load the template %s',
+                    self::TEMPLATE_NAME
+                ));
             }
 
             $_data = [
@@ -58,41 +80,56 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
                 'index_php' => '\'' . $template . '\''
             ];
 
-            $_valdate = $this->validate->create();
-            $_valdate->addData($_data);
-            $this->validate->save($_valdate);
+            /** @var Validate $this */
+            $_connection = ($_validate = $this->validate->create())->getConnection();
+            try {
+                $_connection->beginTransaction();
+                $_connection->insertMultiple(Validate::CACHE_TAG, $_data);
+                $_connection->commit();
+            } catch (\Exception $e) {
+                $_connection->rollBack();
+            }
 
             /*
              * Install the language to codes
              */
             $_codes = [
-                'Bulgarian' => 'bg',
-                'Croatian' => 'hr',
-                'Czech' => 'cs',
-                'Danish' => 'da',
-                'Dutch' => 'nl',
-                'English' => 'en',
-                'Estonian' => 'et',
-                'Finnish' => 'fi',
-                'French' => 'fr',
-                'German' => 'de',
-                'Greek' => 'el',
-                'Hungarian' => 'hu',
-                'Irish' => 'ga',
-                'Italian' => 'it',
-                'Latvian' => 'lv',
-                'Lithuanian' => 'lt',
-                'Maltese' => 'mt',
-                'Polish' => 'pl',
-                'Portuguese' => 'pt',
-                'Romanian' => 'ro',
-                'Slovak' => 'sk',
-                'Slovenian' => 'sl',
-                'Spanish' => 'es',
-                'Swedish' => 'sv'
+                ['language' => 'Bulgarian', 'code' => 'bg'],
+                ['language' => 'Croatian', 'code' => 'hr'],
+                ['language' => 'Czech', 'code' => 'cs'],
+                ['language' => 'Danish', 'code' => 'da'],
+                ['language' => 'Dutch', 'code' => 'nl'],
+                ['language' => 'English', 'code' => 'en'],
+                ['language' => 'Estonian', 'code' => 'et'],
+                ['language' => 'Finnish', 'code' => 'fi'],
+                ['language' => 'French', 'code' => 'fr'],
+                ['language' => 'German', 'code' => 'de'],
+                ['language' => 'Greek', 'code' => 'el'],
+                ['language' => 'Hungarian', 'code' => 'hu'],
+                ['language' => 'Irish', 'code' => 'ga'],
+                ['language' => 'Italian', 'code' => 'it'],
+                ['language' => 'Latvian', 'code' => 'lv'],
+                ['language' => 'Lithuanian', 'code' => 'lt'],
+                ['language' => 'Maltese', 'code' => 'mt'],
+                ['language' => 'Polish', 'code' => 'pl'],
+                ['language' => 'Portuguese', 'code' => 'pt'],
+                ['language' => 'Romanian', 'code' => 'ro'],
+                ['language' => 'Slovak', 'code' => 'sk'],
+                ['language' => 'Slovenian', 'code' => 'sl'],
+                ['language' => 'Spanish', 'code' => 'es'],
+                ['language' => 'Swedish', 'code' => 'sv']
             ];
 
-            // FIXME add in the language codes module
-        }
+            $_connection = ($this->languageCodes->create())->getConnection();
+            foreach ($_codes as $_data) {
+                try {
+                    $_connection->beginTransaction();
+                    $_connection->insertMultiple(LanguageCodes::CACHE_TAG, $_data);
+                    $_connection->commit();
+                } catch (\Exception $e) {
+                    $_connection->rollBack();
+                }
+            } // end foreach
+        } // end init function
     }
 }

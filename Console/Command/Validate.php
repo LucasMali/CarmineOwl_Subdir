@@ -50,6 +50,7 @@ class Validate extends Command
         $name = $input->getArgument(self::NAME_ARGUMENT);
         $option = $input->getOption(self::NAME_OPTION);
         $output->writeln("TODO build out validate " . $name);
+
     }
 
     /**

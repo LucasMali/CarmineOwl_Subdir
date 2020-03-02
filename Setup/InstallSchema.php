@@ -30,7 +30,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
     private function init($installer, $context)
     {
         if (!$context->getVersion()) {
-
             /*
              * Create the main settings table
              */
@@ -56,8 +55,15 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             )->addColumn(
                 'index_php',
                 \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+                null,
                 ['nullable' => false],
                 'The PHP index.php file to be generated'
+            )->addColumn(
+                'store_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['nullable' => true],
+                'Store ID associated with this'
             )->addColumn(
                 'creation_time',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
@@ -89,9 +95,9 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
              * Create the language to code table.
              */
             $table = $installer->getConnection()->newTable(
-                $installer->getTable('carmineowl_subdir_language_codes')
+                $installer->getTable('carmineowl_subdir_languagecodes')
             )->addColumn(
-                'language_codes_id',
+                'languagecodes_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 [
