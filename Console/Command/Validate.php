@@ -60,7 +60,7 @@ class Validate extends Command
         $name = $input->getArgument(self::NAME_ARGUMENT);
         $option = $input->getOption(self::NAME_OPTION);
         try {
-            $this->validationManager->run();
+            $this->validationManager->execute();
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }

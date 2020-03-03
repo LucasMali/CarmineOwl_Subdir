@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CarmineOwl\Subdir\Helper;
+namespace CarmineOwl\Subdir\Model\Subdirectories;
 
 
 /**
@@ -10,11 +10,15 @@ namespace CarmineOwl\Subdir\Helper;
  */
 abstract class Directories
 {
+    const MAGENTO_DIRECTORY_PERMISSION = 0755;
+    const MAGENTO_FILE_PERMISSION = 0644;
+    const RECURSIVE = true;
+
     /**
      * @param string $directory
      * @return bool
      */
-    public static function isValid(string $directory)
+    public static function exists(string $directory)
     {
         return is_dir($directory);
     }
@@ -24,7 +28,7 @@ abstract class Directories
      */
     public static function create(string $directory)
     {
-        mkdir($directory);
+        mkdir($directory, self::MAGENTO_DIRECTORY_PERMISSION, self::RECURSIVE);
     }
 
     public static function delete(string $directory)

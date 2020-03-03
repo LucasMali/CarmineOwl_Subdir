@@ -1,10 +1,12 @@
 <?php
 
-namespace CarmineOwl\Subdir\Helper;
+namespace CarmineOwl\Subdir\Model\Subdirectories;
 
 use CarmineOwl\Subdir\Model\LanguageCodesRepository as LanguageCodesRepository;
 use CarmineOwl\Subdir\Model\ValidateFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class ValidationManager
@@ -12,9 +14,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class ValidationManager
 {
-    const PARAM_RUN_CODE_PATTERN = '{{$}}';
-    const STORE_CODE_PATTERN = '';
-
     /**
      * @var DirectoryList
      */
@@ -27,28 +26,34 @@ class ValidationManager
      * @var ValidateFactory
      */
     private $validate;
+    /**
+     * @var FileBuilder
+     */
+    private $fileBuilder;
 
     /**
      * GenerateIndex constructor.
      * @param DirectoryList $directoryList
      * @param LanguageCodesRepository $languageCodes
      * @param ValidateFactory $validate
+     * @param FileBuilder $fileBuilder
      */
     public function __construct(
         DirectoryList $directoryList,
         LanguageCodesRepository $languageCodes,
-        ValidateFactory $validate
+        ValidateFactory $validate,
+        FileBuilder $fileBuilder
     ) {
         $this->directoryList = $directoryList;
         $this->languageCodes = $languageCodes;
         $this->validate = $validate;
+        $this->fileBuilder = $fileBuilder;
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * Do not use yet.
      */
-    public function run()
+    public function execute()
     {
         // get the values
         $_validate = $this->validate->create()->getCollection();
@@ -58,46 +63,20 @@ class ValidationManager
                 continue;
             }
             $_absoluteFolderPath = $this->directoryList->getRoot() . DIRECTORY_SEPARATOR . $val->getFolder();
-            if (!Directories::isValid($_absoluteFolderPath)) {
+            if (!Directories::exists($_absoluteFolderPath)) {
                 // Generate index.php from template
-                $this->buildFile(
+                $this->fileBuilder->execute(
                     $this->cleanTheContent($val->getIndexPhp()),
                     $val->getFolder(),
-                    $_absoluteFolderPath
+                    $_absoluteFolderPath,
+                    $this->directoryList->getRoot()
                 );
-                // Transfer files, .htaccess
-                copy($this->directoryList->getRoot() . DIRECTORY_SEPARATOR . 'pub' . DIRECTORY_SEPARATOR . '.htaccess',
-                    $_absoluteFolderPath . DIRECTORY_SEPARATOR . '.htaccess');
-            } // end valid directories
-        } // end foreach
-    }
-
-    /**
-     * @param string $template
-     * @param string $code
-     * @param string $absoluteFolderPath
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function buildFile(
-        string $template,
-        string $code,
-        string $absoluteFolderPath
-    ) {
-        $_languageCode = $this->languageCodes->getByCode($code);
-        $_lang = strtolower($_languageCode->getLanguage());
-        $_code = self::STORE_CODE_PATTERN . $_lang;
-        $template = str_replace(self::PARAM_RUN_CODE_PATTERN, $_code, $template);
-        Directories::create($absoluteFolderPath);
-        file_put_contents(
-            $absoluteFolderPath . DIRECTORY_SEPARATOR . 'index.php',
-            $template
-        );
+            }
+        }
     }
 
     private function cleanTheContent($content)
     {
         return trim($content, '\'');
     }
-
 }
