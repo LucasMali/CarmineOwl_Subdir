@@ -1,12 +1,9 @@
 <?php
 
-namespace CarmineOwl\Subdir\Model\Subdirectories;
+namespace CarmineOwl\Subdir\Model;
 
 use CarmineOwl\Subdir\Model\LanguageCodesRepository as LanguageCodesRepository;
-use CarmineOwl\Subdir\Model\ValidateFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class ValidationManager

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CarmineOwl\Subdir\Model\Subdirectories;
+namespace CarmineOwl\Subdir\Model;
 
 
 /**

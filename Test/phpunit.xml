@@ -1,0 +1,7 @@
+<!-- Copy the directory into ROOT/dev/tests/unit/phpunit.xml-->
+<!--<testsuite name="Magento Unit Tests">-->
+<!--    <directory suffix="Test.php">../../../app/code/CarmineOwl/Subdir/Test/Unit</directory>-->
+<!--</testsuite>-->
+<testsuite name="Magento Unit Tests">
+    <directory suffix="Test.php">Unit</directory>
+</testsuite>

@@ -1,6 +1,6 @@
 <?php
 
-namespace CarmineOwl\Subdir\Model\Subdirectories;
+namespace CarmineOwl\Subdir\Model;
 
 /**
  * Class FileBuilder
@@ -30,20 +30,19 @@ class FileBuilder
     ) {
         $this->template = $this->buildTemplate($code, $template);
 
-        Directories::exists($absoluteFolderPath) ?? Directories::delete($absoluteFolderPath);
-        Directories::create($absoluteFolderPath);
+        if (!Directories::exists($absoluteFolderPath)) {
+            Directories::create($absoluteFolderPath);
+        }
 
         file_put_contents(
             $absoluteFolderPath . DIRECTORY_SEPARATOR . 'index.php',
-            $template
+            $this->template
         );
 
         copy(
             $rootPath . DIRECTORY_SEPARATOR . 'pub' . DIRECTORY_SEPARATOR . '.htaccess',
             $absoluteFolderPath . DIRECTORY_SEPARATOR . '.htaccess'
         );
-
-        return $this;
     }
 
     public function buildTemplate($code, $template)
