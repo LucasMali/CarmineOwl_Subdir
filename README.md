@@ -10,7 +10,7 @@
 
 
 ## Main Functionalities
-Simple
+This module simply creates a subdirectory of the site you are making. It is designed to create an instance to leverage subdirectories per site.
 
 ## Installation
 \* = in production please use the `--keep-generated` option
